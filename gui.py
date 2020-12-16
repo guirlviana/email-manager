@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 from config_email import Emailer  
   
 
-sg.theme('DarkTeal9') 
+sg.theme('DarkBrown3') 
   
 layout = [[sg.Text('Email de')],[sg.Input(size=(40,1), key="email_remetente")], 
           [sg.Text('Senha do Email')],[sg.Input(password_char='*', size=(40,1), key="senha_email")],
@@ -21,7 +21,6 @@ while True:
         break
     
     if event == 'Enviar email':
-        
         mail = Emailer(email_remetente=values['email_remetente'], senha_email=values['senha_email'])
         mail.definir_conteudo(assunto=values['assunto'],
         lista_contatos=values['email_to'].split(), conteudo_email=values['conteudo'])
