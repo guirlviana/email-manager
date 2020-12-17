@@ -38,7 +38,7 @@ class Emailer:
                 nome_arquivo = a.name
             self.msg.add_attachment(dados, maintype='application', subtype='octet-stream', filename=nome_arquivo)
 
-    def enviar_email(self, intervalo):
+    def enviar_email(self, intervalo, contato):
         # envio
         try:
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as stmp:
@@ -47,6 +47,6 @@ class Emailer:
                 time.sleep(intervalo)
 
         except Exception:
-            print('Não foi possivel enviar o email')
+            print(f'Não foi possivel enviar o email para {contato}')
         else:
-            print('Email enviado com sucesso!')
+            print(f'Email enviado com sucesso para {contato}!')
