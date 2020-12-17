@@ -17,17 +17,17 @@ def send_mail(values, window):
         mail.definir_conteudo(assunto=values['assunto'],
         lista_contatos=[contato], conteudo_email=values['conteudo'])
 
-    lista_de_anexos = mostrar_arquivos(values=values)
-    lista_de_arquivos = formatar_somente_arquivos(lista=lista_de_anexos)
-    lista_de_imagens = formatar_somente_imagens(lista=lista_de_anexos)
-    # print(f'Lista de anexos: {lista_de_anexos}')
-    print('')
-    print(f'Lista de arquivos: {lista_de_arquivos}')
-    print('')
-    print(f'Lista de imagens: {lista_de_imagens}')
-        # mail.anexar_arquivos(lista_arquivos=lista_de_arquivos)
-        # mail.anexar_imagens(lista_imagens=lista_de_imagens)
-        # mail.enviar_email(intervalo=5, contato=contato)
+        lista_de_anexos = mostrar_arquivos(values=values)
+        lista_de_arquivos = formatar_somente_arquivos(lista=lista_de_anexos)
+        lista_de_imagens = formatar_somente_imagens(lista=lista_de_anexos)
+        
+        if len(lista_de_arquivos) != 0:
+            mail.anexar_arquivos(lista_arquivos=lista_de_arquivos)
+        
+        if len(lista_contatos) != 0:
+            mail.anexar_imagens(lista_imagens=lista_de_imagens)
+
+        mail.enviar_email(intervalo=5, contato=contato)
     window.write_event_value('end up', 'emails enviados com sucesso!')
 
 def extract(caminho): 
@@ -43,7 +43,6 @@ def mostrar_arquivos(values):
     
     return lista_com_arquivos
     
-
 def formatar_somente_arquivos(lista):
     lista_formatada = []
     if len(lista) == 0:
@@ -58,6 +57,7 @@ def formatar_somente_arquivos(lista):
                 lista_formatada.append(arquivo)
         return lista_formatada
         # diferenciar se é arquivo ou foto e mandar pra cada função (criar duas listas e mandar)
+
 def formatar_somente_imagens(lista):
     lista_formatada = []
     if len(lista) == 0:
@@ -69,6 +69,7 @@ def formatar_somente_imagens(lista):
             elif "jpg" in arquivo:
                 lista_formatada.append(arquivo)
         return lista_formatada
+
 while True:   
     event, values = window.read() 
 
@@ -82,7 +83,8 @@ while True:
     
     elif event == 'end up':
         thread_sendmail.join()
-        print(values['end up'])
+        sg.popup(values['end up'])
+        
         window['Enviar email'].update(disabled=False)
 
     if event == 'Visualizar anexos adicionados':
