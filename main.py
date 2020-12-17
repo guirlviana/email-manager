@@ -6,7 +6,7 @@ import os
 sg.theme('DarkBrown3') 
 layout = gui.layout()
 
-window = sg.Window('EMAIL MANAGER', layout) 
+window = sg.Window('EMAIL MANAGER', layout,element_justification='center') 
 
 def send_mail(values, window):
     window['Enviar email'].update(disabled=True)
@@ -30,9 +30,6 @@ def send_mail(values, window):
         mail.enviar_email(intervalo=5, contato=contato)
     window.write_event_value('end up', 'emails enviados com sucesso!')
 
-def extract(caminho): 
-   str_pos = caminho.rfind("\\")
-   print(caminho[str_pos+1:])
 
 def mostrar_arquivos(values):
     caminhos = values['arquivos'].replace(';', f'{os.linesep}')      
@@ -70,7 +67,16 @@ def formatar_somente_imagens(lista):
                 lista_formatada.append(arquivo)
         return lista_formatada
 
+def atualizar_botao(window):
+    print('''
+x======================x
+|    FINALIZADO PROCESSO    |
+x======================x
+            ''')
+    window['Enviar email'].update(disabled=False)
+
 while True:   
+
     event, values = window.read() 
 
     if event in (None, 'Exit'): 
@@ -83,11 +89,19 @@ while True:
     
     elif event == 'end up':
         thread_sendmail.join()
-        sg.popup(values['end up'])
-        
-        window['Enviar email'].update(disabled=False)
+        message = values['end up']
+        atualizar_botao(window)
 
-    if event == 'Visualizar anexos adicionados':
+        
+    if event == 'Limpar corpo do email':
+        for k, v in values.items():
+            print(k)
+            if k != 'arquivos':
+                window[k].update('')
+        window['status'].update('')
+                    
+
+    if event == 'Visualizar arquivos adicionados':
         caminhos = mostrar_arquivos(values=values)
         if len(caminhos) == 0:
             window['anexos'].update('')
