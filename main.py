@@ -3,10 +3,10 @@ from config_email import Emailer
 import gui 
 import threading
 import os
-sg.theme('DarkBrown3') 
+sg.theme('Dark') 
 layout = gui.layout()
 
-window = sg.Window('EMAIL MANAGER', layout,element_justification='center') 
+window = sg.Window('EMAIL MANAGER', layout,element_justification='center',icon='email.ico') 
 
 def send_mail(values, window):
     window['Enviar email'].update(disabled=True)
